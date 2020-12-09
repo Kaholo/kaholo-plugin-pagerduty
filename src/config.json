@@ -1,0 +1,42 @@
+{
+    "name": "pager-duty",
+    "type": "executer",
+    "execProgram": "node",
+    "main": "app.js",
+    "exposeRoute": true,
+    "imgUrl": "pg.png",
+    "version": "1.0.0",
+    "description": "Integration with PagerDuty REST API integration",
+    "settings": [
+        {
+            "name": "TOKEN",
+            "viewName": "Token",
+            "type": "vault"
+        }
+    ],
+    "methods": [
+        {
+            "name": "CREATE_INCIDET",
+            "viewName": "Create Incident",
+            "params": [
+                {
+                  "name": "EMAIL",
+                  "viewName": "email",
+                  "type": "string"
+                },
+                {
+                  "name": "SERVICE_ID",
+                  "viewName": "Service ID",
+                  "type": "autocomplete",
+                  "autocompleteType": "function",
+                  "functionName": "getAllServices"
+                },
+                {
+                  "name": "TITLE",
+                  "viewName": "Title",
+                  "type": "string"
+                }
+            ]
+        }
+    ]       
+}
