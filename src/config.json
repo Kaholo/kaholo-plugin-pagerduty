@@ -32,11 +32,22 @@
                   "functionName": "getAllServices"
                 },
                 {
+                  "name": "ASSIGNEE",
+                  "viewName": "Assignee",
+                  "type": "autocomplete",
+                  "autocompleteType": "function",
+                  "functionName": "getUserList"
+                },
+                {
                   "name": "TITLE",
                   "viewName": "Title",
                   "type": "string"
-                }
+                }               
             ]
+        },
+        {
+          "name": "CREATE_CHANGE_EVENT",
+          "viewName": "Create Change Event"
         }
     ]       
 }

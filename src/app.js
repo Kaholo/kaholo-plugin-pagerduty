@@ -1,12 +1,14 @@
 const fetch = require('node-fetch');
-const {getAllServices} = require('./autocomplete');
+const {getAllServices, getUserList} = require('./autocomplete');
 
 ///////////////////// METHODS ///////////////////// 
 async function createNewIncident(action,settings) {
     const method = "POST";
     const url = "https://api.pagerduty.com/incidents";
     const serviceId = action.params.SERVICE_ID.id;
-    const title = action.params.TITLE
+    const userId = action.params.ASSIGNEE.id;
+    const title = action.params.TITLE;
+    const email = action.params.EMAIL;
     let body = {
         "incident": {
             "type": "incident",
@@ -17,25 +19,42 @@ async function createNewIncident(action,settings) {
             }
         }
     }
+    if (typeof (userId) != 'undefined') {
+        const a = {
+            "id": `${userId}`,
+            "type": "user_reference"
+        }
+        body.assignments = [a];
+    }
     body = JSON.stringify(body);
-    return await genericRestAPI(action,settings, method, url, body);
+    return await genericRestAPI(action,settings, method, url, body, email);
+}
+
+async function createChangeEvent (action, settings) {
+    const method = "POST";
+    const url = "https://api.pagerduty.com/change_events";
+    return await genericRestAPI(action,settings, method, url);
 }
 
 ///////////////////// HELPERS ///////////////////// 
-async function genericRestAPI(action, settings, method, url, body) {
+async function genericRestAPI(action, settings, method, url, body, email) {
     /**
      * Send Default API Request
      */
-    const request = {
+    let request = {
         method: `${method}`,
         headers: {
             'Authorization': `Token token=${settings.TOKEN}`,
             'Accept': 'application/vnd.pagerduty+json;version=2',
             'Content-Type': 'application/json',
-            'From': `${action.params.EMAIL}`
         },
         body: body
     };
+
+    if (typeof(email) !== 'undefined') {
+        request.headers.From = `${action.params.EMAIL}`
+    }
+    
     response = await fetch(url, request);
     if (!response.ok) {
         throw response
@@ -45,5 +64,8 @@ async function genericRestAPI(action, settings, method, url, body) {
 
 module.exports = {
     CREATE_INCIDET : createNewIncident,
-    getAllServices
-}
+    CREATE_CHANGE_EVENT: createChangeEvent,
+    // autocomplete
+    getAllServices,
+    getUserList
+};
