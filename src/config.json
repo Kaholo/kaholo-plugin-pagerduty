@@ -21,15 +21,20 @@
             "params": [
                 {
                   "name": "EMAIL",
-                  "viewName": "email",
+                  "viewName": "email*",
                   "type": "string"
                 },
                 {
                   "name": "SERVICE_ID",
-                  "viewName": "Service ID",
+                  "viewName": "Service ID*",
                   "type": "autocomplete",
                   "autocompleteType": "function",
                   "functionName": "getAllServices"
+                },
+                {
+                  "name": "TITLE",
+                  "viewName": "Title*",
+                  "type": "string"
                 },
                 {
                   "name": "ASSIGNEE",
@@ -39,15 +44,37 @@
                   "functionName": "getUserList"
                 },
                 {
-                  "name": "TITLE",
-                  "viewName": "Title",
+                  "name": "URGENCY",
+                  "viewName": "Urgency",
                   "type": "string"
-                }               
+                }              
             ]
         },
         {
           "name": "CREATE_CHANGE_EVENT",
-          "viewName": "Create Change Event"
+          "viewName": "Create Change Event",
+          "params": [
+            {
+              "name": "SUMMARY",
+              "viewName": "Summary *",
+              "type": "string"
+            },
+            {
+              "name": "ROUTING_KEY",
+              "viewName": "Routing Key *",
+              "type": "string"
+            },
+            {
+              "name": "SOURCE",
+              "viewName": "Source",
+              "type": "string"
+            },
+            {
+              "name": "CUSTOM_DETAILS",
+              "viewName": "Custom Details (An Object)",
+              "type": "string"
+            }
+          ]
         }
     ]       
 }

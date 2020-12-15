@@ -3,6 +3,10 @@ const {getAllServices, getUserList} = require('./autocomplete');
 
 ///////////////////// METHODS ///////////////////// 
 async function createNewIncident(action,settings) {
+    /**
+     * Creates a new Incident 
+     * Based on Docs here: https://developer.pagerduty.com/api-reference/reference/REST/openapiv3.json/paths/~1incidents/post
+     */
     const method = "POST";
     const url = "https://api.pagerduty.com/incidents";
     const serviceId = action.params.SERVICE_ID.id;
@@ -31,9 +35,24 @@ async function createNewIncident(action,settings) {
 }
 
 async function createChangeEvent (action, settings) {
+    /**
+     * Send a change events to PD Events API. 
+     * Based on the docs in this path: https://developer.pagerduty.com/api-reference/reference/events-v2/openapiv3.json/paths/~1change~1enqueue/post
+     */
     const method = "POST";
-    const url = "https://api.pagerduty.com/change_events";
-    return await genericRestAPI(action,settings, method, url);
+    const url = "https://events.pagerduty.com/v2/change/enqueue";
+    const time = new Date();
+    let body = {
+        "payload": {
+            "summary": action.params.SUMMARY,
+            "timestamp": time,
+        },
+        "routing_key": action.params.ROUTING_KEY,
+    }
+    body.payload.source = action.params.SOURCE ? action.params.SOURCE : undefined;
+    body.payload.custom_details = action.params.CUSTOM_DETAILS ? action.params.CUSTOM_DETAILS : undefined;
+    body = JSON.stringify(body);
+    return await genericRestAPI(action,settings, method, url, body);
 }
 
 ///////////////////// HELPERS ///////////////////// 
@@ -50,18 +69,15 @@ async function genericRestAPI(action, settings, method, url, body, email) {
         },
         body: body
     };
-
     if (typeof(email) !== 'undefined') {
         request.headers.From = `${action.params.EMAIL}`
     }
-    
     response = await fetch(url, request);
     if (!response.ok) {
         throw response
     }
     return response.json();
 }
-
 module.exports = {
     CREATE_INCIDET : createNewIncident,
     CREATE_CHANGE_EVENT: createChangeEvent,
