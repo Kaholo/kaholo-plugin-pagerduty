@@ -42,12 +42,7 @@
                   "type": "autocomplete",
                   "autocompleteType": "function",
                   "functionName": "getUserList"
-                },
-                {
-                  "name": "URGENCY",
-                  "viewName": "Urgency",
-                  "type": "string"
-                }              
+                }    
             ]
         },
         {
