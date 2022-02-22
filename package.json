@@ -1,6 +1,5 @@
 {
   "name": "kaholo-plugin-pagerduty",
-  "version": "1.0.0",
   "description": "Kaholo Plugin for Datadog",
   "main": "app.js",
   "scripts": {
