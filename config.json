@@ -6,7 +6,7 @@
   "main": "app.js",
   "exposeRoute": true,
   "imgUrl": "pg.png",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Integration with PagerDuty REST API integration",
   "keywords": [
     "pagerduty",
