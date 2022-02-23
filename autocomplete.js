@@ -1,57 +1,44 @@
-const fetch = require("node-fetch");
+const {
+  performApiRequest, constructAuthorizationHeader, mapSettingsAndParams,
+  filterAutocompleteOptions, mapAutocompleteOptions,
+} = require("./helpers");
 
 /**
  * This method will return to the plugin all the
  * existing services to attach to the created incident.
  */
 async function getAllServices(query, pluginSettings) {
-  const url = `https://api.pagerduty.com/services?query=${query}&sort_by=name`;
-  const request = {
+  const { settings } = mapSettingsAndParams(pluginSettings);
+  const result = await performApiRequest({
+    path: "services",
     method: "GET",
-    headers: {
-      Authorization: `Token token=${pluginSettings[0].value}`,
-      Accept: "application/vnd.pagerduty+json;version=2",
-      "Content-Type": "application/json",
+    params: {
+      query,
+      sort_by: "name",
     },
-  };
-  const response = await fetch(url, request);
-  if (!response.ok) {
-    throw response;
-  }
-  const result = await response.json();
-  const options = result.services.map((service) => ({ id: service.id, value: service.name }));
-  if (!query) {
-    return options;
-  }
-  const filteredList = options.filter((val) => val.value.includes(query));
-  return filteredList;
+    headers: constructAuthorizationHeader(settings.TOKEN),
+  });
+  const options = mapAutocompleteOptions(result.services);
+  return filterAutocompleteOptions(options, query);
 }
 
 /**
- * This method will return to the plugin all the existing users to assign to the new incidet
+ * This method will return to the plugin all the existing users to assign to the new incident
  */
 async function getUserList(query, pluginSettings) {
-  const url = `https://api.pagerduty.com/users?query=${query}`;
-  const request = {
+  const { settings } = mapSettingsAndParams(pluginSettings);
+  const result = await performApiRequest({
+    path: "users",
     method: "GET",
-    headers: {
-      Authorization: `Token token=${pluginSettings[0].value}`,
-      Accept: "application/vnd.pagerduty+json;version=2",
-      "Content-Type": "application/json",
+    params: {
+      query,
     },
-  };
-  const response = await fetch(url, request);
-  if (!response.ok) {
-    throw response;
-  }
-  const result = await response.json();
-  const options = result.users.map((user) => ({ id: user.id, value: user.name }));
-  if (!query) {
-    return options;
-  }
-  const filteredList = options.filter((val) => val.value.includes(query));
-  return filteredList;
+    headers: constructAuthorizationHeader(settings.TOKEN),
+  });
+  const options = mapAutocompleteOptions(result.users);
+  return filterAutocompleteOptions(options, query);
 }
+
 module.exports = {
   getAllServices,
   getUserList,

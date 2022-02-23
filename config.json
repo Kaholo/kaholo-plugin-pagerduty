@@ -28,25 +28,30 @@
       "params": [
         {
           "name": "EMAIL",
-          "viewName": "email*",
+          "viewName": "Email",
+          "description": "The email address of a valid user associated with the account making the request.",
           "type": "string"
         },
         {
           "name": "SERVICE_ID",
-          "viewName": "Service ID*",
+          "viewName": "Service ID",
           "type": "autocomplete",
           "autocompleteType": "function",
           "description": "The name of the service to create the incident in. You can find your PagerDuty Service ID by clicking on Service --> Service Directory --> Service Name. In the page URL, PagerDuty will give you the specific Service ID for that Service.",
-          "functionName": "getAllServices"
+          "functionName": "getAllServices",
+          "required": true
         },
         {
           "name": "TITLE",
-          "viewName": "Title*",
-          "type": "string"
+          "viewName": "Title",
+          "description": "A succinct description of the nature, symptoms, cause, or effect of the incident.",
+          "type": "string",
+          "required": true
         },
         {
           "name": "ASSIGNEE",
           "viewName": "Assignee",
+          "description": "Assign the incident to these assignees. Cannot be specified if an escalation policy is given.",
           "type": "autocomplete",
           "autocompleteType": "function",
           "functionName": "getUserList"
@@ -60,12 +65,14 @@
         {
           "name": "SUMMARY",
           "viewName": "Summary *",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "ROUTING_KEY",
           "viewName": "Routing Key *",
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         {
           "name": "SOURCE",

@@ -9,6 +9,7 @@
   "author": "Ilan Yaniv",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
