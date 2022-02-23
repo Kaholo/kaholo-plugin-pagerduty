@@ -39,16 +39,16 @@ async function createNewIncident(action, settings) {
   let body = {
     incident: {
       type: "incident",
-      title: `${title}`,
+      title,
       service: {
-        id: `${serviceId}`,
+        id: serviceId,
         type: "service_reference",
       },
     },
   };
   if (typeof (userId) !== "undefined") {
     const a = {
-      id: `${userId}`,
+      id: userId,
       type: "user_reference",
     };
     body.assignments = [a];
