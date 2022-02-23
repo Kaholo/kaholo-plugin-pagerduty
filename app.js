@@ -1,6 +1,6 @@
 const autocomplete = require("./autocomplete");
 const {
-  performApiRequest, constructAuthorizationHeader, constructEmailHeader,
+  performApiRequest, constructAuthorizationHeader, constructEmailHeader, tidyObject,
 } = require("./helpers");
 
 /**
@@ -9,7 +9,8 @@ const {
  */
 async function createNewIncident({ params }, settings) {
   const {
-    SERVICE_ID, ASSIGNEE, TITLE, EMAIL,
+    SERVICE_ID, ASSIGNEE, TITLE, EMAIL, token, details, incidentKey,
+    urgency, priority, escalationPolicy, conferenceNumber, conferenceUrl,
   } = params;
   const data = {
     incident: {
@@ -19,22 +20,38 @@ async function createNewIncident({ params }, settings) {
         id: SERVICE_ID.id,
         type: "service_reference",
       },
+      assignments: ASSIGNEE && [{
+        assignee: {
+          id: ASSIGNEE.id,
+          type: "user_reference",
+        },
+      }],
+      body: details && {
+        type: "incident_body",
+        details,
+      },
+      incident_key: incidentKey,
+      urgency,
+      priority: priority && {
+        type: "priority_reference",
+        id: priority.id,
+      },
+      escalation_policy: escalationPolicy && {
+        type: "escalation_policy_reference",
+        id: escalationPolicy.id,
+      },
+      conference_bridge: (conferenceNumber || conferenceUrl) && {
+        conference_number: conferenceNumber,
+        conference_url: conferenceUrl,
+      },
     },
   };
-  if (ASSIGNEE) {
-    data.incident.assignments = [{
-      assignee: {
-        id: ASSIGNEE.id,
-        type: "user_reference",
-      },
-    }];
-  }
   const result = await performApiRequest({
     method: "POST",
     path: "incidents",
-    data,
+    data: tidyObject(data),
     headers: {
-      ...constructAuthorizationHeader(settings.TOKEN),
+      ...constructAuthorizationHeader(token || settings.TOKEN),
       ...constructEmailHeader(EMAIL),
     },
   });

@@ -1,6 +1,8 @@
 const axios = require("axios").default;
+const _ = require("lodash");
 
-const REQUEST_FAILED_MESSSAGE = (serverMessage) => `Failed to send request to the PagerDuty API. Make sure you have required permissions and valid token.${serverMessage ? ` Server response:\n${serverMessage}` : ""}`;
+const UNAUTHORIZED_MESSAGE = "Server returned HTTP 401 \"Unauthorized\". Make sure your token is correct.";
+const REQUEST_FAILED_MESSSAGE = "Failed to send request to the PagerDuty API. Make sure you have required permissions and valid token.";
 
 const API_BASE_URL = "https://api.pagerduty.com";
 
@@ -8,14 +10,17 @@ const API_BASE_URL = "https://api.pagerduty.com";
  * Parses the PagerDuty API error into string
  * @param {Object} responseData
  */
-function parsePagerDutyErrorMessage(responseData = {}) {
-  const { message, errors } = responseData.error;
+function parsePagerDutyErrorMessage(responseData) {
+  const { message, errors } = (responseData || {}).error || {};
   let errorResponse = `${message}\n`;
   if (errors) {
     errorResponse += errors.join("\n");
   }
   if (!message) {
     errorResponse = JSON.stringify(responseData);
+  }
+  if (responseData === "") {
+    errorResponse = responseData;
   }
   return errorResponse;
 }
@@ -63,9 +68,37 @@ async function performApiRequest({
     });
     return response.data;
   } catch (error) {
-    const errorMessage = parsePagerDutyErrorMessage(error.response.data);
-    throw new Error(REQUEST_FAILED_MESSSAGE(errorMessage));
+    let errorMessage = REQUEST_FAILED_MESSSAGE;
+    const serverResponse = parsePagerDutyErrorMessage(error.response.data);
+    if (error.response.status === 401) {
+      errorMessage = UNAUTHORIZED_MESSAGE;
+    }
+    if (serverResponse) {
+      errorMessage += ` Server response: \n${serverResponse}`;
+    }
+    throw new Error(errorMessage);
   }
+}
+
+/**
+ * Removes keys from object if the value is undefined or null
+ * @param {Object} o
+ */
+function tidyObject(o) {
+  const canStay = (value) => !(
+    _.isNil(value) || (
+      (_.isObject(value) || _.isString(value)) && _.isEmpty(value)
+    )
+  );
+  if (_.isArray(o)) {
+    return o.map((el) => tidyObject(el)).filter(canStay);
+  }
+  if (_.isPlainObject(o)) {
+    return Object.fromEntries(Object.entries(o)
+      .map(([key, value]) => [key, tidyObject(value)])
+      .filter(([, value]) => canStay(value)));
+  }
+  return o;
 }
 
 /**
@@ -108,4 +141,5 @@ module.exports = {
   mapSettingsAndParams,
   filterAutocompleteOptions,
   mapAutocompleteOptions,
+  tidyObject,
 };
