@@ -1,5 +1,6 @@
 {
   "name": "pager-duty",
+  "viewName": "PagerDuty",
   "type": "executer",
   "execProgram": "node",
   "main": "app.js",
@@ -7,6 +8,12 @@
   "imgUrl": "pg.png",
   "version": "1.0.2",
   "description": "Integration with PagerDuty REST API integration",
+  "keywords": [
+    "pagerduty",
+    "incident",
+    "event",
+    "api"
+    ],
   "settings": [
     {
       "name": "TOKEN",
@@ -29,6 +36,7 @@
           "viewName": "Service ID*",
           "type": "autocomplete",
           "autocompleteType": "function",
+          "description": "The name of the service to create the incident in. You can find your PagerDuty Service ID by clicking on Service --> Service Directory --> Service Name. In the page URL, PagerDuty will give you the specific Service ID for that Service.",
           "functionName": "getAllServices"
         },
         {
