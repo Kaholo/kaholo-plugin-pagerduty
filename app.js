@@ -40,7 +40,7 @@ async function createNewIncident({ params }, settings) {
         type: "escalation_policy_reference",
         id: ESCALATION_POLICY.id,
       },
-      conference_bridge: (CONFERENCE_NUMBER || CONFERENCE_URL) && {
+      conference_bridge: {
         conference_number: CONFERENCE_NUMBER,
         conference_url: CONFERENCE_URL,
       },
