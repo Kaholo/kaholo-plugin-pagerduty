@@ -58,7 +58,7 @@
         {
           "name": "INCIDENT_KEY",
           "viewName": "Incident Key",
-          "description": "A string which identifies the incident. Sending subsequent requests referencing the same service and with the same incident_key will result in those requests being rejected if an open incident matches that incident_key.",
+          "description": "A string which identifies the incident. Sending subsequent requests referencing the same service and with the same Incident Key will result in those requests being rejected if an open incident matches that Incident Key.",
           "type": "string",
           "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
         },
@@ -67,7 +67,7 @@
           "viewName": "Service",
           "type": "autocomplete",
           "autocompleteType": "function",
-          "description": "The name of the service to create the incident in. You can find your PagerDuty Service ID by clicking on Service --> Service Directory --> Service Name. In the page URL, PagerDuty will give you the specific Service ID for that Service.",
+          "description": "The name of the service to create the incident in.",
           "functionName": "getAllServices",
           "required": true,
           "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
