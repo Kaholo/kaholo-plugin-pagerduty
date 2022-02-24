@@ -9,8 +9,8 @@ const {
  */
 async function createNewIncident({ params }, settings) {
   const {
-    SERVICE_ID, ASSIGNEE, TITLE, EMAIL, token, details, incidentKey,
-    urgency, priority, escalationPolicy, conferenceNumber, conferenceUrl,
+    SERVICE_ID, ASSIGNEE, TITLE, EMAIL, TOKEN, DETAILS, INCIDENT_KEY,
+    URGENCY, PRIORITY, ESCALATION_POLICY, CONFERENCE_NUMBER, CONFERENCE_URL,
   } = params;
   const data = {
     incident: {
@@ -26,23 +26,23 @@ async function createNewIncident({ params }, settings) {
           type: "user_reference",
         },
       }],
-      body: details && {
+      body: DETAILS && {
         type: "incident_body",
-        details,
+        details: DETAILS,
       },
-      incident_key: incidentKey,
-      urgency,
-      priority: priority && {
+      incident_key: INCIDENT_KEY,
+      urgency: URGENCY,
+      priority: PRIORITY && {
         type: "priority_reference",
-        id: priority.id,
+        id: PRIORITY.id,
       },
-      escalation_policy: escalationPolicy && {
+      escalation_policy: ESCALATION_POLICY && {
         type: "escalation_policy_reference",
-        id: escalationPolicy.id,
+        id: ESCALATION_POLICY.id,
       },
-      conference_bridge: (conferenceNumber || conferenceUrl) && {
-        conference_number: conferenceNumber,
-        conference_url: conferenceUrl,
+      conference_bridge: (CONFERENCE_NUMBER || CONFERENCE_URL) && {
+        conference_number: CONFERENCE_NUMBER,
+        conference_url: CONFERENCE_URL,
       },
     },
   };
@@ -51,7 +51,7 @@ async function createNewIncident({ params }, settings) {
     path: "incidents",
     data: tidyObject(data),
     headers: {
-      ...constructAuthorizationHeader(token || settings.TOKEN),
+      ...constructAuthorizationHeader(TOKEN || settings.TOKEN),
       ...constructEmailHeader(EMAIL),
     },
   });
