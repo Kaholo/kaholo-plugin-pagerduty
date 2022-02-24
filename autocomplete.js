@@ -3,7 +3,7 @@ const {
   filterAutocompleteOptions, mapAutocompleteOptions,
 } = require("./helpers");
 
-const INVALID_ARRAY_PATH_MESSAGE = "API Response received in unexpected format.";
+const INVALID_ARRAY_PATH_MESSAGE = "Autocomplete function is not configured correctly. API Response was received in an unexpected format.";
 const PATH_UNDEFINED_MESSAGE = "Autocomplete function is not configured correctly. Option \"path\" is required.";
 
 const AUTOCOMPLETE_OPTIONS_LIMIT = 5;
