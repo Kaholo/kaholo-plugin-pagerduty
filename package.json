@@ -1,6 +1,5 @@
 {
   "name": "kaholo-plugin-pagerduty",
-  "description": "Kaholo Plugin for Datadog",
   "main": "app.js",
   "scripts": {
     "lint": "npx eslint .",

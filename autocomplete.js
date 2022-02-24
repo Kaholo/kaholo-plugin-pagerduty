@@ -3,9 +3,15 @@ const {
   filterAutocompleteOptions, mapAutocompleteOptions,
 } = require("./helpers");
 
+const INVALID_ARRAY_PATH_MESSAGE = "API Response received in unexpected format.";
+const PATH_UNDEFINED_MESSAGE = "Autocomplete function is not configured correctly. Option \"path\" is required.";
+
 const AUTOCOMPLETE_OPTIONS_LIMIT = 5;
 
 function createAutocompleteFunction({ path, resultArrayPath, requestParams }) {
+  if (!path) {
+    throw new Error(PATH_UNDEFINED_MESSAGE);
+  }
   return async (query, pluginSettings, actionParams) => {
     const { settings, params } = mapSettingsAndParams(pluginSettings, actionParams);
     const result = await performApiRequest({
@@ -14,11 +20,15 @@ function createAutocompleteFunction({ path, resultArrayPath, requestParams }) {
       params: {
         query,
         limit: AUTOCOMPLETE_OPTIONS_LIMIT,
-        ...requestParams,
+        ...(requestParams || {}),
       },
       headers: constructAuthorizationHeader(params.TOKEN || settings.TOKEN),
     });
-    const options = mapAutocompleteOptions(result[resultArrayPath || path]);
+    const items = result[resultArrayPath || path];
+    if (!items) {
+      throw new Error(INVALID_ARRAY_PATH_MESSAGE);
+    }
+    const options = mapAutocompleteOptions(items);
     return filterAutocompleteOptions(options, query);
   };
 }

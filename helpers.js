@@ -13,7 +13,11 @@ function parsePagerDutyErrorMessage(responseData) {
     errorResponse += errors.join("\n");
   }
   if (!message) {
-    errorResponse = JSON.stringify(responseData);
+    try {
+      errorResponse = JSON.stringify(responseData);
+    } catch {
+      errorResponse = responseData;
+    }
   }
   if (responseData === "") {
     errorResponse = responseData;

@@ -7,7 +7,7 @@
   "exposeRoute": true,
   "imgUrl": "pg.png",
   "version": "2.0.0",
-  "description": "Integration with PagerDuty REST API integration",
+  "description": "Integration with PagerDuty REST API.",
   "keywords": [
     "pagerduty",
     "incident",
