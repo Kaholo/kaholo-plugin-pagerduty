@@ -1,5 +1,4 @@
 const axios = require("axios").default;
-const _ = require("lodash");
 
 const UNAUTHORIZED_MESSAGE = "Server returned HTTP 401 \"Unauthorized\". Make sure your token is correct.";
 const REQUEST_FAILED_MESSSAGE = "Failed to send request to the PagerDuty API. Make sure you have required permissions and valid token.";
@@ -59,23 +58,6 @@ async function performApiRequest({
   }
 }
 
-function tidyObject(o) {
-  const canStay = (value) => !(
-    _.isNil(value) || (
-      (_.isObject(value) || _.isString(value)) && _.isEmpty(value)
-    )
-  );
-  if (_.isArray(o)) {
-    return o.map((el) => tidyObject(el)).filter(canStay);
-  }
-  if (_.isPlainObject(o)) {
-    return Object.fromEntries(Object.entries(o)
-      .map(([key, value]) => [key, tidyObject(value)])
-      .filter(([, value]) => canStay(value)));
-  }
-  return o;
-}
-
 function mapSettingsAndParams(arraySttngs, arrayParams) {
   const sttngs = Object.fromEntries((arraySttngs || []).map(({ name, value }) => [name, value]));
   const params = Object.fromEntries((arrayParams || []).map(({ name, value }) => [name, value]));
@@ -100,5 +82,4 @@ module.exports = {
   mapSettingsAndParams,
   filterAutocompleteOptions,
   mapAutocompleteOptions,
-  tidyObject,
 };

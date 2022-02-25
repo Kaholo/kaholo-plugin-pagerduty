@@ -1,6 +1,6 @@
 const autocomplete = require("./autocomplete");
 const {
-  performApiRequest, constructAuthorizationHeader, constructEmailHeader, tidyObject,
+  performApiRequest, constructAuthorizationHeader, constructEmailHeader,
 } = require("./helpers");
 const parsers = require("./parsers");
 
@@ -30,42 +30,58 @@ async function createNewIncident({ params }, settings) {
         id: SERVICE_ID,
         type: "service_reference",
       },
-      assignments: ASSIGNEE && [{
-        assignee: {
-          id: ASSIGNEE,
-          type: "user_reference",
-        },
-      }],
-      body: DETAILS && {
-        type: "incident_body",
-        details: DETAILS,
-      },
-      incident_key: INCIDENT_KEY,
-      urgency: URGENCY,
-      priority: PRIORITY && {
-        type: "priority_reference",
-        id: PRIORITY,
-      },
-      escalation_policy: ESCALATION_POLICY && {
-        type: "escalation_policy_reference",
-        id: ESCALATION_POLICY,
-      },
-      conference_bridge: {
-        conference_number: CONFERENCE_NUMBER,
-        conference_url: CONFERENCE_URL,
-      },
     },
   };
-  const result = await performApiRequest({
+  if (ASSIGNEE) {
+    data.incident.assignments = [{
+      assignee: {
+        id: ASSIGNEE,
+        type: "user_reference",
+      },
+    }];
+  }
+  if (DETAILS) {
+    data.incident.body = {
+      type: "incident_body",
+      details: DETAILS,
+    };
+  }
+  if (INCIDENT_KEY) {
+    data.incident.incident_key = INCIDENT_KEY;
+  }
+  if (URGENCY) {
+    data.incident.URGENCY = URGENCY;
+  }
+  if (PRIORITY) {
+    data.incident.priority = {
+      type: "priority_reference",
+      id: PRIORITY,
+    };
+  }
+  if (ESCALATION_POLICY) {
+    data.incident.escalation_policy = {
+      type: "escalation_policy_reference",
+      id: ESCALATION_POLICY,
+    };
+  }
+  if (CONFERENCE_NUMBER || CONFERENCE_URL) {
+    data.incident.conference_bridge = {};
+    if (CONFERENCE_NUMBER) {
+      data.incident.conference_bridge.conference_number = CONFERENCE_NUMBER;
+    }
+    if (CONFERENCE_URL) {
+      data.incident.conference_bridge.conference_url = CONFERENCE_URL;
+    }
+  }
+  return performApiRequest({
     method: "POST",
     path: "incidents",
-    data: tidyObject(data),
+    data,
     headers: {
       ...constructAuthorizationHeader(TOKEN || settings.TOKEN),
       ...constructEmailHeader(EMAIL),
     },
   });
-  return result;
 }
 
 /**
