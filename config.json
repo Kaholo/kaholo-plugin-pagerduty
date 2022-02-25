@@ -27,26 +27,36 @@
       "viewName": "Create Incident",
       "params": [
         {
-          "name": "TOKEN",
-          "viewName": "API Token",
-          "description": "An API token that you provide when making API calls.",
-          "type": "vault",
-          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
-        },
-        {
-          "required": true,
           "name": "EMAIL",
           "viewName": "Email",
           "description": "The email address of a valid user associated with the account making the request.",
           "type": "string",
-          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
         },
         {
-          "required": true,
           "name": "TITLE",
           "viewName": "Title",
           "description": "A succinct description of the nature, symptoms, cause, or effect of the incident.",
           "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
+        },
+        {
+          "name": "SERVICE_ID",
+          "viewName": "Service",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "description": "The name of the service to create the incident in.",
+          "functionName": "getAllServices",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
+        },
+        {
+          "name": "TOKEN",
+          "viewName": "API Token",
+          "description": "An API token that you provide when making API calls.",
+          "type": "vault",
           "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
         },
         {
@@ -61,16 +71,6 @@
           "viewName": "Incident Key",
           "description": "A string which identifies the incident. Sending subsequent requests referencing the same service and with the same Incident Key will result in those requests being rejected if an open incident matches that Incident Key.",
           "type": "string",
-          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
-        },
-        {
-          "name": "SERVICE_ID",
-          "viewName": "Service",
-          "type": "autocomplete",
-          "autocompleteType": "function",
-          "description": "The name of the service to create the incident in.",
-          "functionName": "getAllServices",
-          "required": true,
           "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
         },
         {
@@ -138,20 +138,20 @@
       "viewName": "Create Change Event",
       "params": [
         {
-          "required": true,
           "name": "SUMMARY",
           "viewName": "Summary",
           "description": "A brief text summary of the event, used to generate the summaries/titles of any associated alerts.",
           "type": "string",
-          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api"
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api",
+          "required": true
         },
         {
-          "required": true,
           "name": "ROUTING_KEY",
           "viewName": "Routing Key",
           "description": "The GUID of one of your Events API V2 integrations. This is the \"Integration Key\" listed on the Events API V2 integration's detail page.",
           "type": "string",
-          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api"
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api",
+          "required": true
         },
         {
           "name": "SOURCE",
