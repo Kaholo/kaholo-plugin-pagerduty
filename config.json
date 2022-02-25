@@ -1,0 +1,174 @@
+{
+  "name": "pager-duty",
+  "viewName": "PagerDuty",
+  "type": "executer",
+  "execProgram": "node",
+  "main": "app.js",
+  "exposeRoute": true,
+  "imgUrl": "pg.png",
+  "version": "2.0.0",
+  "description": "Integration with PagerDuty REST API.",
+  "keywords": [
+    "pagerduty",
+    "incident",
+    "event",
+    "api"
+  ],
+  "settings": [
+    {
+      "name": "TOKEN",
+      "viewName": "Token",
+      "type": "vault"
+    }
+  ],
+  "methods": [
+    {
+      "name": "CREATE_INCIDET",
+      "viewName": "Create Incident",
+      "params": [
+        {
+          "name": "EMAIL",
+          "viewName": "Email",
+          "description": "The email address of a valid user associated with the account making the request.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
+        },
+        {
+          "name": "TITLE",
+          "viewName": "Title",
+          "description": "A succinct description of the nature, symptoms, cause, or effect of the incident.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
+        },
+        {
+          "name": "SERVICE_ID",
+          "viewName": "Service",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "description": "The name of the service to create the incident in.",
+          "functionName": "getAllServices",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident",
+          "required": true
+        },
+        {
+          "name": "TOKEN",
+          "viewName": "API Token",
+          "description": "An API token that you provide when making API calls.",
+          "type": "vault",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "DETAILS",
+          "viewName": "Details",
+          "description": "Additional incident details.",
+          "type": "text",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "INCIDENT_KEY",
+          "viewName": "Incident Key",
+          "description": "A string which identifies the incident. Sending subsequent requests referencing the same service and with the same Incident Key will result in those requests being rejected if an open incident matches that Incident Key.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "URGENCY",
+          "viewName": "Urgency",
+          "description": "The urgency of the incident.",
+          "type": "options",
+          "options": [
+            {
+              "id": "low",
+              "name": "Low"
+            },
+            {
+              "id": "high",
+              "name": "High"
+            }
+          ],
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "PRIORITY",
+          "viewName": "Priority",
+          "description": "A priority is a label representing the importance and impact of an incident. This feature is only available on Standard and Enterprise plans.",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "getPriorities",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "ASSIGNEE",
+          "viewName": "Assignee",
+          "description": "Assign the incident to these assignees. Cannot be specified if an escalation policy is given.",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "getUserList",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "ESCALATION_POLICY",
+          "viewName": "Escalation Policy",
+          "description": "Escalation policies define which user should be alerted at which time.",
+          "type": "autocomplete",
+          "autocompleteType": "function",
+          "functionName": "getEscalationPolicies",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "CONFERENCE_NUMBER",
+          "viewName": "Conference Number",
+          "description": "The phone number of the conference call for the conference bridge. Phone numbers should be formatted like +1 415-555-1212,,,,1234#, where a comma (,) represents a one-second wait and pound (#) completes access code input.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        },
+        {
+          "name": "CONFERENCE_URL",
+          "viewName": "Conference URL",
+          "description": "An URL for the conference bridge. This could be a link to a web conference or Slack channel.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MA-create-an-incident"
+        }
+      ]
+    },
+    {
+      "name": "CREATE_CHANGE_EVENT",
+      "viewName": "Create Change Event",
+      "params": [
+        {
+          "name": "SUMMARY",
+          "viewName": "Summary",
+          "description": "A brief text summary of the event, used to generate the summaries/titles of any associated alerts.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api",
+          "required": true
+        },
+        {
+          "name": "ROUTING_KEY",
+          "viewName": "Routing Key",
+          "description": "The GUID of one of your Events API V2 integrations. This is the \"Integration Key\" listed on the Events API V2 integration's detail page.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api",
+          "required": true
+        },
+        {
+          "name": "SOURCE",
+          "viewName": "Source",
+          "description": "The unique location of the affected system, preferably a hostname or FQDN.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api"
+        },
+        {
+          "name": "CUSTOM_DETAILS",
+          "viewName": "Custom Details (an Object)",
+          "description": "Additional details about the event and affected system.",
+          "type": "string",
+          "learnUrl": "https://developer.pagerduty.com/api-reference/b3A6Mjc0ODI2Ng-send-change-events-to-the-pager-duty-events-api"
+        }
+      ]
+    }
+  ],
+  "category": "MONITORING"
+}
